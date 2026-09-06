@@ -1,0 +1,576 @@
+/* Atelier de vise — pastel theme. Import AFTER styles.css (e.g. add `import './pastel-theme.css'` in main.tsx). */
+.preview-notice {
+  padding: 9px 18px;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.6;
+  background: #f3e5d9;
+  color: #6b4a35;
+  border-bottom: 1px solid #e8dfd4;
+}
+.preview-form-note {
+  padding: 16px;
+  border: 1px solid #dfc9bb;
+  border-radius: 12px;
+  background: #f8f2eb;
+  color: #6b4a35;
+  font-size: 13px;
+}
+@media (max-width: 600px) {
+  body:has(.preview-notice) .desktop-nav {
+    top: 170px;
+  }
+}
+:root {
+  color: #2e2a27;
+  background: #f8f2eb;
+  --cream: #f8f2eb;
+  --orange: #c0483a; /* strident accent: raspberry */
+  --pink: #e7a999;
+  --ink: #2e2a27;
+  --muted: #8a7d72;
+  --line: #e8dfd4;
+  --lilac: #b06a5c; /* secondary accent */
+}
+::selection {
+  background: #f3d6cf;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline-color: #c0483a;
+}
+
+/* Chrome */
+.announcement {
+  background: #ecdccb;
+  color: #6b4a35;
+}
+.brand em,
+.section-heading h2 em,
+.page-heading h1 em,
+.hero-title-flower {
+  color: var(--lilac);
+}
+.hero h1 em {
+  color: var(--lilac);
+}
+.desktop-nav button.active,
+.desktop-nav button:hover,
+.text-button:hover,
+.orange-text {
+  color: var(--orange);
+}
+.admin-link {
+  color: var(--muted);
+}
+
+/* Buttons: pill shapes */
+.button,
+.button.small {
+  border-radius: 30px;
+}
+.button.primary {
+  background: var(--orange);
+  box-shadow: 0 8px 24px #c0483a33;
+}
+.button.primary:hover {
+  background: #a63a2d;
+}
+.button.dark:hover {
+  background: var(--orange);
+}
+.button.outline {
+  border-color: #e3d8cb;
+}
+.button.outline:hover {
+  background: #f1e7dc;
+}
+.icon-button:hover {
+  background: #f1e7dc;
+}
+.cream-button {
+  background: #f8f2eb;
+  color: #a63a2d;
+}
+.cream-button:hover {
+  background: #f3d6cf;
+}
+
+/* Hero */
+.eyebrow {
+  color: var(--lilac);
+}
+.little-line {
+  background: var(--orange);
+}
+.hero-copy > p {
+  color: #7d7066;
+}
+.handwritten {
+  color: var(--lilac);
+}
+.hero-pink-shape {
+  background: #c9d8ea;
+}
+.hero-caption {
+  background: var(--cream);
+}
+.hero-caption > span {
+  color: var(--lilac);
+}
+.hero-round-sticker {
+  background: var(--orange);
+  color: #fff;
+}
+.hero-scribble {
+  color: #8f9a83;
+}
+.tiny-art {
+  background: #cfe0cf;
+  color: #2f5a3c;
+}
+
+/* Category cards: pastel set */
+.category-card {
+  border-radius: 18px;
+}
+.pink {
+  background: #f2c9c4;
+  color: #7d2e2a;
+}
+.orange {
+  background: #f6d5b0;
+  color: #7a4415;
+}
+.green {
+  background: #cfe0cf;
+  color: #2f5a3c;
+}
+.yellow {
+  background: #f1dc9a;
+  color: #6a4d0a;
+}
+.purple {
+  background: #c9d8ea;
+  color: #2f4a6b;
+}
+.neutral {
+  background: #ece5dc;
+  color: #7d7066;
+}
+
+/* Cards */
+.event-card,
+.calendar-panel,
+.art-image,
+.stat-grid > div,
+.admin-event {
+  border-radius: 18px;
+}
+.event-card {
+  background: #fdfaf6;
+}
+.event-card:hover {
+  box-shadow: 0 12px 30px #2e2a271a;
+}
+.event-image {
+  background: #eae2d8;
+}
+.tag {
+  border-radius: 20px;
+  padding: 7px 11px;
+}
+.date-stamp {
+  background: #fdfaf6;
+  border-radius: 12px;
+}
+.availability {
+  color: #6e8a63;
+}
+.availability i,
+.calendar-legend i,
+.admin-topline i {
+  background: #6e8a63;
+}
+.availability.full,
+.availability.full i {
+  color: #a63a2d;
+  background: #a63a2d;
+}
+.availability.full {
+  background: none;
+}
+.demo-note {
+  color: #6b5a4a;
+  background: #efe3d8;
+  border-left-color: #e2c7b8;
+}
+
+/* Wine banner: the strident moment */
+.wine-banner {
+  background: #e2b9ad;
+  color: #5a2e27;
+  border-radius: 28px;
+}
+.wine-banner p {
+  color: #6b3d33;
+}
+.wine-banner .eyebrow,
+.wine-banner h2 em {
+  color: #a63a2d;
+}
+.wine-banner .cream-button {
+  background: var(--orange);
+  color: #fff;
+}
+.wine-banner .cream-button:hover {
+  background: #a63a2d;
+}
+.wine-drawing .flower {
+  color: #f1c9bf;
+}
+.wine-drawing .flower circle {
+  fill: var(--orange);
+}
+
+/* Story + footer */
+.story-section > .flower {
+  color: #e7a999;
+}
+footer {
+  background: #efe6db;
+}
+.footer-bottom {
+  border-top-color: #e3d8cb;
+}
+
+/* Calendar page */
+.filters button {
+  border-color: #e3d8cb;
+}
+.page-heading > .flower {
+  color: #c9d8ea;
+}
+.calendar-panel {
+  background: #fdfaf6;
+}
+.calendar-grid > button {
+  border-radius: 10px;
+}
+.calendar-grid > button:hover {
+  background: #f1e7dc;
+}
+.calendar-grid > button.selected {
+  background: var(--orange);
+}
+.calendar-grid > button.today {
+  box-shadow: inset 0 0 0 1px var(--orange);
+}
+.calendar-dots i {
+  background: #c0483a;
+}
+.calendar-dots i.green {
+  background: #6e8a63;
+}
+.calendar-dots i.pink {
+  background: #c98a5a;
+}
+.calendar-legend i {
+  background: var(--orange);
+}
+.empty {
+  border-color: #e3d8cb;
+  border-radius: 18px;
+}
+.empty > .flower {
+  color: #e2c7b8;
+}
+
+/* Art */
+.art-image {
+  background: #eadfd3;
+}
+.art-card:nth-child(2) .art-image {
+  background: #dfe3e6;
+}
+.art-card:nth-child(3) .art-image {
+  background: #e5e1d6;
+}
+.art-card-info strong {
+  color: var(--orange);
+}
+.art-detail-image {
+  background: #eadfd3;
+}
+
+/* Modals, forms */
+.modal {
+  border-radius: 24px;
+}
+.modal::backdrop {
+  background: #2e2a27cc;
+}
+.booking-panel {
+  background: #efe3d8;
+  border-radius: 18px;
+}
+.booking-panel > p.availability {
+  border-bottom-color: #e3d8cb;
+}
+.facts > span > svg {
+  color: var(--lilac);
+}
+.field input,
+.field select,
+.field textarea,
+.admin-toolbar > select,
+.search-field {
+  border-color: #e3d8cb;
+  background: #fdfaf6;
+  border-radius: 12px;
+}
+.checkbox-field input {
+  accent-color: var(--orange);
+}
+.error {
+  background: #f8e4de;
+  border-color: #e7a999;
+  color: #8f2e22;
+}
+.success-icon {
+  background: #cfe0cf;
+  color: #2f5a3c;
+}
+.text-modal > .flower,
+.login-card > .flower,
+.loading > .flower {
+  color: var(--orange);
+}
+.text-modal h2 em,
+.login-card h1 em {
+  color: var(--orange);
+}
+
+/* Admin */
+.admin-login {
+  background: radial-gradient(ellipse at 80% 0, #c9d8eacc, transparent 50%), var(--cream);
+}
+.admin-shell {
+  background: #f6f0e9;
+}
+.admin-sidebar {
+  background: var(--cream);
+}
+.admin-sidebar nav button.active {
+  background: #f2c9c4;
+  color: #8f2e22;
+}
+.admin-sidebar nav button:hover {
+  background: #f1e7dc;
+}
+.stat-grid svg {
+  color: var(--lilac);
+}
+
+/* ---- Latest changes ---- */
+/* Faded artwork backdrop (put portret.png in public/images/) */
+body {
+  position: relative;
+  isolation: isolate;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: url('/images/portret.png') center 20% / cover no-repeat;
+  opacity: 0.24;
+  filter: saturate(0.7) contrast(0.9);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #0009 45%, transparent 85%);
+  mask-image: linear-gradient(180deg, #000 0%, #0009 45%, transparent 85%);
+}
+/* Remove decorative stars (the Flower component stays only in the brand/logo) */
+.hero-title-flower,
+.page-heading > .flower,
+.wine-drawing .flower,
+.story-section > .flower,
+.text-modal > .flower,
+.empty > .flower {
+  display: none;
+}
+/* Hero image now shows the artwork */
+.hero-main-image {
+  filter: none;
+  object-position: center 30%;
+}
+/* Category cards — poster style (paper texture, bold title, vertical caramel tagline).
+   Requires the small markup change described in README.md */
+.category-card {
+  display: flex;
+  gap: 14px;
+  padding: 22px 20px 20px 18px;
+  border-radius: 6px;
+  min-height: 200px;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px #e3d8cb;
+  background: #efe6da
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .25 0 0 0 0 .2 0 0 0 .18 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.category-card.pink,
+.category-card.orange,
+.category-card.green,
+.category-card.yellow,
+.category-card.purple {
+  background-color: #efe6da;
+  color: var(--ink);
+}
+.category-card:hover {
+  transform: translateY(-5px);
+  filter: none;
+  box-shadow:
+    inset 0 0 0 1px #c9b9a6,
+    0 12px 28px #2e2a2718;
+}
+.category-card > svg:first-child {
+  display: none;
+}
+.category-tag {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #9a6a3c;
+  line-height: 1;
+  white-space: nowrap;
+  align-self: end;
+}
+.category-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.category-kicker {
+  font-size: 11px;
+  color: #6b5f55;
+  margin-bottom: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.category-arrow {
+  position: static;
+}
+.category-card h3 {
+  font-size: clamp(24px, 1.9vw, 30px);
+  margin: 14px 0 0;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+  text-wrap: balance;
+}
+.category-card p {
+  display: none;
+}
+
+/* Tone stock photos into the supplied palette. */
+.event-image img,
+.art-image img,
+.memory-photo img {
+  filter: saturate(0.55) sepia(0.25) contrast(0.92) brightness(1.04);
+}
+.hero-small-photo img {
+  filter: none;
+  object-position: center 60%;
+}
+
+/* Larger hand-drawn brand mark; retain the compact footer variant. */
+.brand .flower {
+  width: 84px;
+  height: 84px;
+  margin: -8px 0;
+  object-fit: contain;
+}
+.footer-top .brand .flower {
+  width: 40px;
+  height: 40px;
+  margin: 0;
+}
+
+/* Integrate the supplied poster layout with the app's existing breakpoints. */
+.category-kicker .category-arrow {
+  position: static;
+}
+.mobile-nav {
+  background: #f8f2ebf7;
+}
+.mobile-nav > button {
+  color: #7d7066;
+}
+.mobile-nav > button.active {
+  color: var(--orange);
+}
+.mobile-nav > button.active svg {
+  fill: #f3d6cf;
+}
+.lightbox .icon-button:hover {
+  background: #ffffff20;
+}
+.artwork-preview {
+  background: #eadfd3;
+}
+.upload-zone {
+  background: #efe3d8;
+  border-color: #c9b9a6;
+  color: #80513f;
+}
+.settings-form,
+.admin-art-grid article,
+.table-wrap {
+  background: #fdfaf6;
+}
+
+@media (max-width: 1150px) and (min-width: 601px) {
+  .category-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .category-card {
+    min-height: 200px;
+  }
+}
+
+@media (max-width: 600px) {
+  .category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .category-card,
+  .category-card:last-child {
+    flex-direction: row;
+    justify-content: normal;
+    min-height: 200px;
+    padding: 18px 12px;
+    gap: 10px;
+  }
+  .category-tag {
+    font-size: 13px;
+  }
+  .category-kicker {
+    font-size: 10px;
+    gap: 4px;
+  }
+  .category-card h3 {
+    font-size: clamp(22px, 6vw, 28px);
+    line-height: 1;
+  }
+  .category-card:last-child {
+    min-height: 165px;
+  }
+  .category-card:last-child h3 {
+    max-width: 150px;
+  }
+}
