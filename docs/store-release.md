@@ -4,13 +4,13 @@ Aplicațiile din magazine sunt versiunea **live**: evenimentele, înscrierile ș
 
 ## 1. Înainte de orice build
 
-1. **Serverul este online** pe HTTPS, cu `NODE_ENV=production`, `APP_ORIGIN=https://domeniul-tau.ro` și MySQL privat. `NATIVE_ORIGINS` are implicit originile aplicațiilor (`https://localhost` pentru Android, `capacitor://localhost` pentru iOS); nu îl schimba decât dacă știi de ce.
+1. **Serverul este online** pe HTTPS, cu `NODE_ENV=production`, `APP_ORIGIN=https://atelierdevise.ro` și MySQL privat. `NATIVE_ORIGINS` are implicit originile aplicațiilor (`https://localhost` pentru Android, `capacitor://localhost` pentru iOS); nu îl schimba decât dacă știi de ce.
 2. **Setările publice** din Admin → Setări: adresa, telefonul, Instagram și `demo` dezactivat (altfel apar notele „demonstrativ”).
-3. **Textele legale:** completează câmpurile `operator` și `rules` din `src/Legal.tsx`. Paginile trebuie să fie publice la `https://domeniul-tau.ro/confidentialitate` și `/termeni`, fără marcaje „de completat”.
+3. **Textele legale:** completează câmpurile `operator` și `rules` din `src/Legal.tsx`. Paginile trebuie să fie publice la `https://atelierdevise.ro/confidentialitate` și `/termeni`, fără marcaje „de completat”.
 4. **Adresa API-ului pentru aplicații** în `.env.mobile.local` (neversionat):
 
    ```sh
-   VITE_API_URL=https://domeniul-tau.ro
+   VITE_API_URL=https://atelierdevise.ro
    ```
 
    `npm run build:mobile` refuză build-ul fără această adresă, iar scripturile `release:*` acceptă numai HTTPS public.
@@ -68,8 +68,8 @@ Deja configurat în proiect: numai iPhone (rulează și pe iPad în modul compat
 | Descriere scurtă Play (≤ 80) | Seri de pictură, ateliere pentru copii și adulți, tablouri. Rezervă-ți locul. |
 | Cuvinte cheie App Store (≤ 100) | pictura,vin si pictez,atelier,arta,copii,desen,tablouri,expozitie,creativitate,paint and sip |
 | Categorie | Stil de viață (Lifestyle); secundar: Divertisment |
-| URL confidențialitate | https://domeniul-tau.ro/confidentialitate |
-| URL suport / marketing | https://domeniul-tau.ro |
+| URL confidențialitate | https://atelierdevise.ro/confidentialitate |
+| URL suport / marketing | https://atelierdevise.ro |
 
 **Descriere completă:**
 
@@ -88,6 +88,7 @@ Deja configurat în proiect: numai iPhone (rulează și pe iPad în modul compat
 **Imagini** (în `store/`):
 
 - `screenshots/ios/` — 6 capturi 1320 × 2868 (iPhone 6,9"; App Store le scalează pentru celelalte mărimi).
+- `screenshots/ios-6.5/` — aceleași capturi la 1284 × 2778 (iPhone 6,5"), mărimea cerută de App Store Connect pentru slotul principal.
 - `screenshots/android/` — 6 capturi 1080 × 1920 pentru telefon.
 - `feature-graphic.png` — 1024 × 500 (Play), `icon-512.png` — 512 × 512 (Play).
 
