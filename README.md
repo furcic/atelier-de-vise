@@ -1,6 +1,6 @@
 # Atelier de vise
 
-Aplicație în limba română, optimizată pentru telefon, realizată cu React + TypeScript, Node.js / Express și **MySQL**. Include versiunea web/PWA și proiecte **Android + iOS prin Capacitor 8**, care folosesc aceeași interfață. Aplicațiile native sunt deocamdată demonstrative, fără înscrieri reale, și nu sunt publicate în App Store sau Google Play.
+Aplicație în limba română, optimizată pentru telefon, realizată cu React + TypeScript, Node.js / Express și **MySQL**. Include versiunea web/PWA și proiecte **Android + iOS prin Capacitor 8**, care folosesc aceeași interfață. Aplicațiile native folosesc API-ul de producție de pe `https://atelierdevise.ro` (evenimente și înscrieri reale); publicarea în App Store și Google Play este în pregătire, vezi [ghidul de publicare](docs/store-release.md).
 
 ## Ce include
 
@@ -36,7 +36,7 @@ Pentru versiunea live cu baza de date, folosește `npm run build` și serverul E
 
 ## Pornire locală cu MySQL
 
-Pentru aplicațiile Android și iPhone, vezi [Ghidul mobile](docs/mobile.md). Comenzile rapide sunt `npm run mobile:ios` și `npm run mobile:android`; acestea compilează interfața demonstrativă, sincronizează proiectele și deschid IDE-ul platformei. Nu folosesc site-ul GitHub Pages ca server.
+Pentru aplicațiile Android și iPhone, vezi [Ghidul mobile](docs/mobile.md). Comenzile rapide sunt `npm run mobile:ios` și `npm run mobile:android`; acestea compilează versiunea live (API-ul din `VITE_API_URL`), sincronizează proiectele și deschid IDE-ul platformei. Varianta demonstrativă, fără server, este `npm run mobile:sync:demo`. Nu folosesc site-ul GitHub Pages ca server.
 
 Necesită Node.js 22 și MySQL 8.4+.
 
@@ -101,7 +101,7 @@ Păstrează backup-uri MySQL: acestea includ și fotografiile încărcate. Fiși
 
 ## Înainte de lansarea publică
 
-Înlocuiește conținutul demonstrativ cu programul, fotografiile și prețurile reale. Completează identitatea artistului, adresa și telefonul în Setări; înlocuiește textul provizoriu despre date cu politica operatorului și perioada de păstrare. Configurează parolele de producție și backup-urile. Publicarea pe domeniu, conturile viitoare, SMS-urile, plățile și distribuția în magazinele de aplicații sunt etape separate.
+Înlocuiește conținutul demonstrativ cu programul, fotografiile și prețurile reale. Completează identitatea artistului, adresa și telefonul în Setări; înlocuiește textul provizoriu despre date cu politica operatorului și perioada de păstrare. Configurează parolele de producție și backup-urile. Conturile viitoare, SMS-urile și plățile sunt etape separate.
 
 ## Structură
 
