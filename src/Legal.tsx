@@ -17,21 +17,23 @@ const updatedAt = '23 septembrie 2026';
  * the apps; empty values are shown as highlighted placeholders on both pages.
  */
 const operator = {
-  legalName: '', // ex. „Atelier de vise SRL” sau „Popescu Ana PFA”
-  registration: '', // CUI și nr. Registrul Comerțului
-  email: '',
-  hosting: '', // furnizorul serverului și al bazei de date, ex. „Hetzner Online GmbH, Germania”
+  legalName: 'Asociația Atelier de vise',
+  registration: 'CIF 50488901, nr. 2197/A/2024 în Registrul asociațiilor și fundațiilor',
+  seat: 'Str. Aluminei nr. 70/A, bl. D4, ap. 73, Oradea, jud. Bihor',
+  email: 'mireladobrescu79@gmail.com',
+  hosting: 'Hetzner Online GmbH, în Germania',
 };
 // Retention and booking rules the operator must decide; shown as placeholders until set.
 const rules = {
-  bookingRetention: '', // ex. „12 luni de la data evenimentului”
-  inquiryRetention: '', // ex. „6 luni de la ultima discuție”
-  payment: '', // ex. „numerar sau card, la atelier, înainte de începerea evenimentului”
-  cancelNotice: '', // ex. „48 de ore”
-  refund: '', // ex. „restituim integral suma achitată sau mutăm locul la altă dată”
-  hostingLogs: '', // ex. „Furnizorul de hosting păstrează jurnale de acces timp de 14 zile”
-  dataLocation: '', // ex. „Serverul se află în Germania.”
-  kidsPickup: '', // ex. „Copiii sub 8 ani participă însoțiți; la final îi predăm doar persoanei care i-a adus”
+  bookingRetention: '12 luni de la data evenimentului',
+  inquiryRetention: '6 luni de la ultima discuție',
+  payment: 'numerar la atelier sau transfer bancar în contul asociației, în avans, la alegerea ta',
+  cancelNotice: '48 de ore',
+  refund: 'În acest caz îți restituim integral suma achitată sau îți mutăm locul la altă dată',
+  hostingLogs:
+    'Serverul păstrează jurnale de acces (adresa IP, pagina accesată, data și ora) timp de 14 zile, pentru securitate și depanare, după care sunt șterse automat',
+  dataLocation: 'Serverul se află în Germania.',
+  kidsPickup: 'Un părinte sau tutore rămâne la atelier pe toată durata activității',
 };
 
 function Fill({ value, hint }: { value?: string; hint: string }) {
@@ -60,22 +62,14 @@ export function LegalContent({
   const contact = (
     <ul>
       <li>
-        Operator: {name},{' '}
-        <Fill value={operator.registration} hint="CUI și nr. Registrul Comerțului" />
+        Operator: {name}, <Fill value={operator.registration} hint="CIF și nr. de înregistrare" />
       </li>
-      <li>
-        Adresă:{' '}
-        <Fill
-          value={settings?.address && !settings.demo ? settings.address : ''}
-          hint="adresa sediului"
-        />
-      </li>
+      <li>Sediu: {operator.seat}</li>
+      {settings?.address && !settings.demo && <li>Adresa atelierului: {settings.address}</li>}
       <li>
         E-mail: <Fill value={operator.email} hint="adresa de e-mail" />
       </li>
-      <li>
-        Telefon: <Fill value={settings?.phone} hint="numărul de telefon" />
-      </li>
+      {settings?.phone && <li>Telefon: {settings.phone}</li>}
     </ul>
   );
   const link = (target: LegalKind) => (
@@ -169,8 +163,11 @@ export function LegalContent({
               Datele sunt văzute doar de persoanele care administrează atelierul. Serverul și baza
               de date sunt găzduite de{' '}
               <Fill value={operator.hosting} hint="furnizorul de hosting și țara" />, care
-              acționează ca persoană împuternicită și nu folosește datele în scop propriu. Putem
-              divulga date autorităților doar când legea ne obligă.
+              acționează ca persoană împuternicită și nu folosește datele în scop propriu. Traficul
+              către site și aplicații trece prin rețeaua Cloudflare (Cloudflare, Inc.), care
+              protejează serverul și asigură conexiunea HTTPS; Cloudflare poate prelucra adresa IP
+              și în afara Spațiului Economic European, pe baza clauzelor contractuale standard ale
+              Comisiei Europene. Putem divulga date autorităților doar când legea ne obligă.
             </p>
             <p>
               Datele sunt păstrate în Spațiul Economic European.{' '}
