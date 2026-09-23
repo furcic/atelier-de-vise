@@ -71,7 +71,7 @@ export const categories = {
     image: '/images/atelier/copii-casute.webp',
   },
   adults: {
-    label: 'Mare mă distrez',
+    label: 'Mare, mă distrez',
     short: 'Timp pentru tine',
     color: 'green',
     image: '/images/atelier/adulti-pictura.webp',

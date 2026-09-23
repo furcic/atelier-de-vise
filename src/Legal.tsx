@@ -246,7 +246,7 @@ export function LegalContent({
                 copii.
               </li>
               <li>
-                <strong>Mare mă distrez</strong> — ședințe particulare pentru adulți.
+                <strong>Mare, mă distrez</strong> — ședințe particulare pentru adulți.
               </li>
               <li>
                 <strong>Pentru ochi</strong> — expoziții.

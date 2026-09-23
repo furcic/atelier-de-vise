@@ -6,7 +6,7 @@ Aplicație în limba română, optimizată pentru telefon, realizată cu React +
 
 - **Vin și pictez:** evenimente individuale sau serii săptămânale de până la 26 de întâlniri; fiecare joi are înscrieri și galerie proprie.
 - **Mic, dar desenez:** ateliere de grup și ședințe particulare; înscriere cu datele părintelui/tutorelui.
-- **Mare mă distrez:** ședințe particulare pentru adulți.
+- **Mare, mă distrez:** ședințe particulare pentru adulți.
 - **Pentru suflet:** catalog de tablouri, imagini proprii, preț, dimensiuni, tehnică, disponibilitate și cereri de cumpărare.
 - **Pentru ochi:** expoziții cu descriere, loc, dată și export în calendar.
 - Calendar cu filtre pe activitate, zi și format; orele sunt afișate în **Europe/Bucharest**, iar în MySQL sunt stocate în UTC.

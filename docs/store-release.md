@@ -77,7 +77,7 @@ Deja configurat în proiect: numai iPhone (rulează și pe iPad în modul compat
 >
 > • Vin și pictez — în fiecare joi seara pictăm pas cu pas, povestim și ne bucurăm de un pahar de vin. Materialele sunt incluse, iar tabloul pleacă acasă cu tine. (18+)
 > • Mic, dar desenez — ateliere de grup și ședințe particulare pentru copii, în ritmul fiecăruia.
-> • Mare mă distrez — ședințe particulare pentru adulți, doar pentru tine și creativitatea ta.
+> • Mare, mă distrez — ședințe particulare pentru adulți, doar pentru tine și creativitatea ta.
 > • Pentru suflet — tablouri originale; trimite o cerere și te contactăm.
 > • Pentru ochi — expoziții și întâlniri cu arta.
 >
