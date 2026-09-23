@@ -22,6 +22,7 @@
   }
 }
 :root {
+  color-scheme: only light;
   color: #2e2a27;
   background: #f8f2eb;
   --cream: #f8f2eb;
