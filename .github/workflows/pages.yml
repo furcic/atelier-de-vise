@@ -1,7 +1,6 @@
 name: Deploy GitHub Pages preview
+# Obsolete: the live site is https://atelierdevise.ro. Manual runs only.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
