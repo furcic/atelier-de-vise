@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS settings (
   address VARCHAR(240) NOT NULL DEFAULT 'Adresa atelierului va fi anunțată',
   phone VARCHAR(24) NOT NULL DEFAULT '',
   instagram VARCHAR(200) NOT NULL DEFAULT '',
+  facebook VARCHAR(200) NOT NULL DEFAULT '',
   demo BOOLEAN NOT NULL DEFAULT TRUE
 );
 INSERT IGNORE INTO settings (id) VALUES (1);

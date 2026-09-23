@@ -1089,6 +1089,7 @@ function SettingsForm({
         address: String(form.get('address')),
         phone: String(form.get('phone')),
         instagram: String(form.get('instagram')),
+        facebook: String(form.get('facebook')),
         demo: form.get('demo') === 'on',
       });
     } catch (e) {
@@ -1138,6 +1139,16 @@ function SettingsForm({
           defaultValue={settings.instagram}
           maxLength={200}
           placeholder="https://www.instagram.com/atelierul.tau/"
+        />
+      </label>
+      <label className="field">
+        Link Facebook
+        <input
+          name="facebook"
+          type="url"
+          defaultValue={settings.facebook}
+          maxLength={200}
+          placeholder="https://www.facebook.com/atelierul.tau/"
         />
       </label>
       <label className="checkbox-field">

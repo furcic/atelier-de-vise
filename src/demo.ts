@@ -181,7 +181,8 @@ const catalog: Catalog = {
     artist: 'Atelier de vise',
     address: 'Adresa atelierului va fi anunțată',
     phone: '',
-    instagram: '',
+    instagram: 'https://www.instagram.com/atelier.de.vise/',
+    facebook: 'https://www.facebook.com/atelierMiReLaDobrescu/',
     demo: true,
   },
 };

@@ -9,6 +9,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Download,
+  Facebook,
   Heart,
   Home,
   Instagram,
@@ -574,6 +575,11 @@ export default function App() {
             {catalog?.settings.instagram && (
               <a href={catalog.settings.instagram} target="_blank" rel="noreferrer">
                 <Instagram size={16} /> Instagram <ArrowUpRight size={14} />
+              </a>
+            )}
+            {catalog?.settings.facebook && (
+              <a href={catalog.settings.facebook} target="_blank" rel="noreferrer">
+                <Facebook size={16} /> Facebook <ArrowUpRight size={14} />
               </a>
             )}
             {!isMobileBuild && (

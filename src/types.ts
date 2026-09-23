@@ -31,6 +31,7 @@ export type Settings = {
   address: string;
   phone: string;
   instagram: string;
+  facebook: string;
   demo: boolean;
 };
 export type Catalog = { events: AtelierEvent[]; artworks: Artwork[]; settings: Settings };

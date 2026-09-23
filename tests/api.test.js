@@ -378,6 +378,27 @@ test('weekly dates are distinct and invalid events never partially commit', asyn
     400,
   );
 });
+test('settings save Instagram and Facebook links and reject other hosts', async () => {
+  const { settings: original } = (await request(app).get('/api/catalog')).body;
+  const links = {
+    instagram: 'https://www.instagram.com/atelier.de.vise/',
+    facebook: 'https://www.facebook.com/atelierMiReLaDobrescu/',
+  };
+  try {
+    const saved = await admin.put('/api/admin/settings').send({ ...original, ...links });
+    assert.equal(saved.status, 200, JSON.stringify(saved.body));
+    const { settings } = (await request(app).get('/api/catalog')).body;
+    assert.equal(settings.instagram, links.instagram);
+    assert.equal(settings.facebook, links.facebook);
+    const wrongHost = await admin
+      .put('/api/admin/settings')
+      .send({ ...original, facebook: 'https://facebook.example.com/atelier' });
+    assert.equal(wrongHost.status, 400);
+  } finally {
+    await admin.put('/api/admin/settings').send(original);
+  }
+});
+
 test('logout invalidates the session and removes administrative access', async () => {
   assert.equal((await admin.post('/api/admin/logout').send({})).status, 200);
   assert.equal((await admin.get('/api/admin/dashboard')).status, 401);

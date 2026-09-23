@@ -68,6 +68,9 @@ export const settingsSchema = z.object({
     z.literal(''),
     z.url().regex(/^https:\/\/(www\.)?instagram\.com\/[\w.\/-]+$/),
   ]),
+  facebook: z
+    .union([z.literal(''), z.url().regex(/^https:\/\/(www\.|m\.)?facebook\.com\/[\w.\/-]+$/)])
+    .default(''),
   demo: z.boolean(),
 });
 export function problem(status, message) {
