@@ -515,8 +515,9 @@ body::before {
   min-width: 0;
 }
 .category-kicker {
-  font-size: 11px;
-  color: #6b5f55;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--card-deep, #6b5f55);
   margin-bottom: auto;
   display: flex;
   justify-content: space-between;
@@ -613,7 +614,7 @@ body::before {
     grid-column: auto;
     flex-direction: row;
     justify-content: normal;
-    min-height: 150px;
+    min-height: 172px;
     padding: 16px 12px;
     gap: 10px;
   }
@@ -621,7 +622,7 @@ body::before {
     font-size: 12px;
   }
   .category-kicker {
-    font-size: 10px;
+    font-size: 12px;
     gap: 4px;
   }
   .category-card h3 {
@@ -638,10 +639,33 @@ body::before {
     font-size: 15px;
   }
   .category-card:first-child .category-kicker {
-    font-size: 11px;
+    font-size: 13px;
   }
   .category-card:first-child h3 {
     font-size: clamp(32px, 9.5vw, 40px);
+  }
+}
+
+/* Event cards: category label on the photo and format line, readable at a glance. */
+.event-image > .tag {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 12px;
+  box-shadow: 0 2px 8px #2e2a2726;
+}
+.event-eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #5c5249;
+}
+@media (max-width: 600px) {
+  .event-image > .tag {
+    font-size: 12px;
+    padding: 7px 12px;
+  }
+  .event-eyebrow {
+    font-size: 12px;
   }
 }
 
