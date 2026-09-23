@@ -427,19 +427,50 @@ body::before {
   background: #ece1d3
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .25 0 0 0 0 .2 0 0 0 .18 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
+/* "Grădină" palette: one pastel per category, tagline in a deeper shade of it. */
+.category-card.pink {
+  --card: #f4d3cf;
+  --card-deep: #a4524a;
+}
+.category-card.orange {
+  --card: #f8ddc2;
+  --card-deep: #a8683a;
+}
+.category-card.green {
+  --card: #d9e6d3;
+  --card-deep: #4f7350;
+}
+.category-card.yellow {
+  --card: #f6e9b8;
+  --card-deep: #8c7329;
+}
+.category-card.purple {
+  --card: #e3dcef;
+  --card-deep: #6b5a8e;
+}
 .category-card.pink,
 .category-card.orange,
 .category-card.green,
 .category-card.yellow,
 .category-card.purple {
-  background-color: #ece1d3;
+  background-color: var(--card);
   color: var(--ink);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--card-deep) 18%, transparent),
+    0 4px 14px #2e2a270d;
+}
+.category-card.pink .category-tag,
+.category-card.orange .category-tag,
+.category-card.green .category-tag,
+.category-card.yellow .category-tag,
+.category-card.purple .category-tag {
+  color: var(--card-deep);
 }
 .category-card:hover {
   transform: translateY(-5px);
   filter: none;
   box-shadow:
-    inset 0 0 0 1px #c9b9a6,
+    inset 0 0 0 1px color-mix(in srgb, var(--card-deep, #9a6a3c) 30%, transparent),
     0 12px 28px #2e2a2718;
 }
 .category-card > svg:first-child {
@@ -552,33 +583,44 @@ body::before {
 }
 
 @media (max-width: 600px) {
+  /* "Vin și pictez" is the main activity: full width on top, the other four in a 2×2 grid. */
   .category-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .category-card,
   .category-card:last-child {
+    grid-column: auto;
     flex-direction: row;
     justify-content: normal;
-    min-height: 200px;
-    padding: 18px 12px;
+    min-height: 150px;
+    padding: 16px 12px;
     gap: 10px;
   }
   .category-tag {
-    font-size: 13px;
+    font-size: 12px;
   }
   .category-kicker {
     font-size: 10px;
     gap: 4px;
   }
   .category-card h3 {
-    font-size: clamp(22px, 6vw, 28px);
+    font-size: clamp(20px, 5.4vw, 24px);
     line-height: 1;
   }
-  .category-card:last-child {
-    min-height: 165px;
+  .category-card:first-child {
+    grid-column: 1 / -1;
+    min-height: 190px;
+    padding: 20px 18px 20px 14px;
+    gap: 14px;
   }
-  .category-card:last-child h3 {
-    max-width: 150px;
+  .category-card:first-child .category-tag {
+    font-size: 15px;
+  }
+  .category-card:first-child .category-kicker {
+    font-size: 11px;
+  }
+  .category-card:first-child h3 {
+    font-size: clamp(32px, 9.5vw, 40px);
   }
 }
 
