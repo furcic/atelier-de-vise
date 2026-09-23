@@ -34,7 +34,10 @@ test('Pages preview works below the repository path without calling an API', asy
   await page.getByRole('button', { name: 'Închide', exact: true }).click();
   await page.locator('.desktop-nav').getByRole('button', { name: 'Amintiri' }).click();
   await page.locator('.event-card').first().click();
-  await expect(page.locator('.photo-grid img')).toHaveCount(3);
+  // Demo memories carry 8 or 10 real atelier photos; the app caps events at 10.
+  const photos = page.locator('.photo-grid img');
+  await expect(photos.first()).toBeVisible();
+  expect(await photos.count()).toBeLessThanOrEqual(10);
   await page.locator('.photo-grid button').first().click();
   await expect(page.locator('.lightbox img')).toBeVisible();
   await page.getByRole('button', { name: 'Închide fotografia' }).click();
