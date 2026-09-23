@@ -274,7 +274,7 @@ export default function App() {
                     src={assetUrl('/images/atelier/vin-velier-masa.webp')}
                     alt="Tablou cu un velier pe lac, pictat la o seară „Vin și pictez”, lângă un pahar de vin"
                   />
-                  <span>puțină culoare schimbă tot.</span>
+                  <span>Puțină culoare schimbă totul</span>
                 </div>
                 <div className="hero-round-sticker">
                   <Wine size={27} />
