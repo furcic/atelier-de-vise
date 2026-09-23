@@ -1,11 +1,15 @@
+// Live native apps call the production API; the web build uses its own origin ('').
+// Read inline (no imports): tests load this file on its own.
+const apiOrigin = (import.meta.env?.VITE_API_URL || '').replace(/\/$/, '');
 export async function api<T>(path: string, options: RequestInit = {}): Promise<T> {
   if (import.meta.env?.VITE_STATIC_PREVIEW === 'true') {
     const { previewApi } = await import('./demo');
     return previewApi<T>(path, options);
   }
-  const response = await fetch(`/api${path}`, {
+  const response = await fetch(`${apiOrigin}/api${path}`, {
     ...options,
-    credentials: 'same-origin',
+    // The apps never send cookies: they only use public endpoints.
+    credentials: apiOrigin ? 'omit' : 'same-origin',
     headers: {
       ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
       ...options.headers,
@@ -58,28 +62,28 @@ export const categories = {
     label: 'Vin și pictez',
     short: 'O seară specială',
     color: 'pink',
-    image: '/images/workshop.jpg',
+    image: '/images/atelier/vin-floarea-soarelui.webp',
   },
   kids: {
     label: 'Mic, dar desenez',
     short: 'Imaginație fără limite',
     color: 'orange',
-    image: '/images/paints.jpg',
+    image: '/images/atelier/copii-casute.webp',
   },
   adults: {
     label: 'Mare mă distrez',
     short: 'Timp pentru tine',
     color: 'green',
-    image: '/images/paints.jpg',
+    image: '/images/atelier/adulti-pictura.webp',
   },
   exhibition: {
     label: 'Pentru ochi',
     short: 'Artă de văzut',
     color: 'purple',
-    image: '/images/gallery.jpg',
+    image: '/images/atelier/expozitie-liliac.webp',
   },
 };
-export function downloadCalendar(event: {
+export async function downloadCalendar(event: {
   title: string;
   description: string;
   starts_at: string;
@@ -131,9 +135,12 @@ export function downloadCalendar(event: {
     chunks.push(chunk);
     return chunks.join('\r\n');
   });
-  const url = URL.createObjectURL(
-    new Blob([folded.join('\r\n') + '\r\n'], { type: 'text/calendar;charset=utf-8' }),
-  );
+  const data = folded.join('\r\n') + '\r\n';
+  if (import.meta.env?.VITE_NATIVE_APP === 'true') {
+    const { isNativePlatform, shareCalendar } = await import('./native');
+    if (isNativePlatform()) return shareCalendar(data);
+  }
+  const url = URL.createObjectURL(new Blob([data], { type: 'text/calendar;charset=utf-8' }));
   const link = document.createElement('a');
   link.href = url;
   link.download = 'atelier-de-vise.ics';

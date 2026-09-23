@@ -125,7 +125,8 @@ export function Modal({
       aria-label={title}
       onCancel={(e) => {
         e.preventDefault();
-        onClose();
+        // A stacked dialog's cancel also reaches this one through React; close only our own.
+        if (e.target === ref.current) onClose();
       }}
       onClick={(e) => {
         if (e.target === ref.current) onClose();

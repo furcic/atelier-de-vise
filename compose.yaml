@@ -20,6 +20,7 @@ services:
       NODE_ENV: production
       PORT: 3101
       APP_ORIGIN: ${APP_ORIGIN:?Configurează adresa HTTPS publică}
+      NATIVE_ORIGINS: ${NATIVE_ORIGINS:-https://localhost,capacitor://localhost}
       DB_HOST: db
       DB_PORT: 3306
       DB_NAME: atelier_de_vise

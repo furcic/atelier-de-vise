@@ -1,0 +1,57 @@
+name: Mobile demo builds
+
+# Run manually when a test APK / simulator app is needed. No signing secrets or store publishing.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: npm ci
+      - run: npm run mobile:sync:demo
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:mobile
+      - run: ./gradlew assembleDebug
+        working-directory: android
+      - uses: actions/upload-artifact@v4
+        with:
+          name: atelier-de-vise-android-demo
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
+  ios:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run mobile:sync:demo
+      - name: Build for iOS Simulator (no Apple signing account needed)
+        run: >-
+          xcodebuild -project ios/App/App.xcodeproj -scheme App
+          -configuration Debug -sdk iphonesimulator
+          -destination 'generic/platform=iOS Simulator'
+          -derivedDataPath .local/ios-build CODE_SIGNING_ALLOWED=NO build
+      - run: ditto -c -k --sequesterRsrc --keepParent .local/ios-build/Build/Products/Debug-iphonesimulator/App.app .local/atelier-de-vise-ios-simulator.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: atelier-de-vise-ios-simulator
+          path: .local/atelier-de-vise-ios-simulator.zip
+          if-no-files-found: error
+          retention-days: 14

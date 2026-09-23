@@ -78,12 +78,35 @@ export function createApp(db) {
     res.set('Cache-Control', 'no-store');
     next();
   });
+  // The iOS/Android apps load from their own local origin and call the public API
+  // cross-origin, without cookies. Admin routes stay same-origin only (cookie + CSRF check).
+  const nativeOrigins = new Set(
+    (process.env.NATIVE_ORIGINS ?? 'https://localhost,capacitor://localhost')
+      .split(',')
+      .map((origin) => origin.trim())
+      .filter(Boolean),
+  );
+  const fromNativeApp = (req) =>
+    nativeOrigins.has(req.headers.origin) && !req.path.startsWith('/admin');
+  app.use('/api', (req, res, next) => {
+    if (!fromNativeApp(req)) return next();
+    res.set('Access-Control-Allow-Origin', req.headers.origin);
+    res.vary('Origin');
+    if (req.method !== 'OPTIONS') return next();
+    res.set({
+      'Access-Control-Allow-Methods': 'GET, POST',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Max-Age': '600',
+    });
+    res.status(204).end();
+  });
   app.use('/api', (req, _res, next) => {
     if (!['GET', 'HEAD', 'OPTIONS'].includes(req.method)) {
       const origin = req.headers.origin;
-      if (origin && origin !== (process.env.APP_ORIGIN || 'http://localhost:5174'))
+      const native = fromNativeApp(req);
+      if (origin && !native && origin !== (process.env.APP_ORIGIN || 'http://localhost:5174'))
         return next(problem(403, 'Origine neautorizată.'));
-      if (req.headers['sec-fetch-site'] === 'cross-site')
+      if (!native && req.headers['sec-fetch-site'] === 'cross-site')
         return next(problem(403, 'Cerere neautorizată.'));
       if (!req.is('application/json') && !req.is('multipart/form-data'))
         return next(problem(415, 'Formatul cererii nu este acceptat.'));
@@ -155,6 +178,7 @@ export function createApp(db) {
       );
       if (!session.length) throw problem(404, 'Imaginea nu există.');
     }
+    res.set('Cross-Origin-Resource-Policy', 'cross-origin');
     res.type(rows[0].mime).send(rows[0].data);
   });
   app.get('/api/artwork-images/:id', async (req, res) => {
@@ -162,6 +186,7 @@ export function createApp(db) {
       idParam(req.params.id),
     ]);
     if (!rows.length) throw problem(404, 'Imaginea nu există.');
+    res.set('Cross-Origin-Resource-Policy', 'cross-origin');
     res.type(rows[0].mime).send(rows[0].data);
   });
 

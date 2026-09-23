@@ -106,6 +106,51 @@ test('rejects cross-site writes and incorrect login', async () => {
     401,
   );
 });
+test('native apps can use the public API cross-origin but never the admin API', async () => {
+  const id = await createEvent({ title: 'Test aplicație mobilă' });
+  for (const origin of ['https://localhost', 'capacitor://localhost']) {
+    const preflight = await request(app)
+      .options(`/api/events/${id}/register`)
+      .set('Origin', origin)
+      .set('Access-Control-Request-Method', 'POST')
+      .set('Access-Control-Request-Headers', 'content-type');
+    assert.equal(preflight.status, 204);
+    assert.equal(preflight.headers['access-control-allow-origin'], origin);
+    assert.equal(preflight.headers['access-control-allow-credentials'], undefined);
+    const catalog = await request(app).get('/api/catalog').set('Origin', origin);
+    assert.equal(catalog.headers['access-control-allow-origin'], origin);
+  }
+  const booked = await request(app)
+    .post(`/api/events/${id}/register`)
+    .set('Origin', 'https://localhost')
+    .set('Sec-Fetch-Site', 'cross-site')
+    .send({ ...contact, phone: '0722000111' });
+  assert.equal(booked.status, 201, JSON.stringify(booked.body));
+  // Admin: no CORS grant and writes rejected, even from an app origin.
+  const login = await request(app)
+    .post('/api/admin/login')
+    .set('Origin', 'capacitor://localhost')
+    .send({ email: 'a@b.ro', password: 'foo' });
+  assert.equal(login.status, 403);
+  assert.equal(login.headers['access-control-allow-origin'], undefined);
+  const adminPreflight = await request(app)
+    .options('/api/admin/events')
+    .set('Origin', 'https://localhost')
+    .set('Access-Control-Request-Method', 'POST');
+  assert.equal(adminPreflight.headers['access-control-allow-origin'], undefined);
+  // Other sites get nothing.
+  const other = await request(app).get('/api/catalog').set('Origin', 'https://attacker.example');
+  assert.equal(other.headers['access-control-allow-origin'], undefined);
+  assert.equal(
+    (
+      await request(app)
+        .post(`/api/events/${id}/register`)
+        .set('Origin', 'https://attacker.example')
+        .send({ ...contact, phone: '0722000222' })
+    ).status,
+    403,
+  );
+});
 test('competing registrations cannot oversell the last two seats', async () => {
   const id = await createEvent();
   const results = await Promise.all(
@@ -210,6 +255,10 @@ test('gallery persists images, strips to webp, caps at ten including concurrent 
       contentType: 'image/png',
     });
   assert.equal((await upload).status, 201);
+  const [first] = (await request(app).get(`/api/events/${id}/photos`)).body;
+  const image = await request(app).get(first.url);
+  // The native apps show these photos from their own origin.
+  assert.equal(image.headers['cross-origin-resource-policy'], 'cross-origin');
   const results = await Promise.all(
     [0, 1].map((i) =>
       admin
@@ -300,14 +349,12 @@ test('artwork inquiry saves contact but does not reserve; sold works reject requ
   );
 });
 test('weekly dates are distinct and invalid events never partially commit', async () => {
-  const response = await admin
-    .post('/api/admin/events')
-    .send({
-      events: [
-        event,
-        { ...event, starts_at: '2030-01-01T15:00:00Z', ends_at: '2030-01-01T17:00:00Z' },
-      ],
-    });
+  const response = await admin.post('/api/admin/events').send({
+    events: [
+      event,
+      { ...event, starts_at: '2030-01-01T15:00:00Z', ends_at: '2030-01-01T17:00:00Z' },
+    ],
+  });
   assert.equal(response.status, 201);
   createdEvents.push(...response.body.ids);
   assert.equal(new Set(response.body.ids).size, 2);

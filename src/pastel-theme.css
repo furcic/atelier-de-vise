@@ -293,10 +293,10 @@ footer {
 .art-image {
   background: #eadfd3;
 }
-.art-card:nth-child(2) .art-image {
+.art-card:nth-child(3n + 2) .art-image {
   background: #dfe3e6;
 }
-.art-card:nth-child(3) .art-image {
+.art-card:nth-child(3n + 3) .art-image {
   background: #e5e1d6;
 }
 .art-card-info strong {
@@ -416,8 +416,10 @@ body::before {
   border-radius: 6px;
   min-height: 200px;
   color: var(--ink);
-  box-shadow: inset 0 0 0 1px #e3d8cb;
-  background: #efe6da
+  box-shadow:
+    inset 0 0 0 1px #d8c8b5,
+    0 4px 14px #2e2a270d;
+  background: #ece1d3
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .25 0 0 0 0 .2 0 0 0 .18 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 .category-card.pink,
@@ -425,7 +427,7 @@ body::before {
 .category-card.green,
 .category-card.yellow,
 .category-card.purple {
-  background-color: #efe6da;
+  background-color: #ece1d3;
   color: var(--ink);
 }
 .category-card:hover {
@@ -573,4 +575,121 @@ body::before {
   .category-card:last-child h3 {
     max-width: 150px;
   }
+}
+
+/* Home: photos from the Thursday "Vin și pictez" evenings */
+.evenings-section {
+  margin-bottom: 70px;
+}
+.evenings-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.evenings-photo {
+  padding: 0;
+  aspect-ratio: 3 / 4;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #eadfd3;
+}
+.evenings-photo:nth-child(even) {
+  transform: translateY(22px);
+}
+.evenings-photo img {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.4s;
+}
+.evenings-photo:hover img,
+.evenings-photo:focus-visible img {
+  transform: scale(1.04);
+}
+@media (max-width: 850px) {
+  .evenings-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .evenings-section {
+    margin-bottom: 60px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .evenings-photo img {
+    transition: none;
+  }
+}
+
+/* Legal pages: privacy policy and terms */
+.legal-content {
+  max-width: 760px;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--ink);
+}
+.legal-content section {
+  padding-top: 26px;
+  margin-top: 26px;
+  border-top: 1px solid #e3d8cb;
+}
+.legal-content h2 {
+  font-size: 24px;
+  line-height: 1.2;
+  margin: 0 0 12px;
+}
+.legal-content p,
+.legal-content ul {
+  margin: 0 0 12px;
+}
+.legal-content ul {
+  padding-left: 20px;
+}
+.legal-content li + li {
+  margin-top: 6px;
+}
+.legal-content a {
+  color: var(--orange);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.legal-updated {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.legal-lead {
+  font-size: 17px;
+}
+.legal-todo {
+  background: #f6d5b0;
+  color: #7a4415;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.92em;
+}
+@media (max-width: 600px) {
+  .legal-content {
+    font-size: 14px;
+  }
+  .legal-content h2 {
+    font-size: 21px;
+  }
+  .legal-lead {
+    font-size: 15px;
+  }
+}
+.consent-link {
+  padding: 0;
+  font: inherit;
+  color: var(--orange);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.legal-modal h2 {
+  margin-bottom: 4px;
+}
+.legal-modal .legal-content {
+  max-width: none;
 }

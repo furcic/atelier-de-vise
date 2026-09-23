@@ -1,4 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useState, type FormEvent } from 'react';
+import { createPortal } from 'react-dom';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -29,10 +30,21 @@ import {
   Modal,
 } from './components';
 import type { AtelierEvent, Artwork, Catalog, Category, Photo, Settings } from './types';
-import { assetUrl, isStaticPreview } from './preview';
+import { assetUrl, isStaticPreview, isMobileBuild } from './preview';
+import { LegalContent, legalPaths, legalTitles, type LegalKind } from './Legal';
 const Admin = lazy(() => import('./Admin'));
 
-type Page = 'home' | 'calendar' | 'memories' | 'art' | 'exhibitions';
+type Page = 'home' | 'calendar' | 'memories' | 'art' | 'exhibitions' | LegalKind;
+const eveningPhotos = [
+  ['vin-pictand', 'Participantă pictând un portret cu flori, la o seară „Vin și pictez”'],
+  ['lucrare-luna-plina', 'Apus portocaliu reflectat în mare, pictat pe șevalet'],
+  ['vin-bujori', 'Buchet de hortensii roz, pictat lângă un pahar de rosé'],
+  ['lucrare-felinar', 'Dansatoare sub lumina unui felinar, pe fundal negru'],
+  ['lucrare-flori-in-par', 'Portret de femeie cu flori roz în loc de păr'],
+  ['lucrare-lamai', 'Lămâi la fereastră, cu marea în fundal'],
+  ['vin-lalele', 'Lalele albe pictate pe o pânză rotundă'],
+  ['lucrare-pisica', 'Silueta unei pisici pe fundalul lunii pline'],
+].map(([name, alt]) => ({ src: `/images/atelier/${name}.webp`, alt }));
 const categoryKicker = {
   wine: 'joi seara',
   kids: 'pentru copii',
@@ -47,11 +59,20 @@ const nav: { id: Page; label: string; icon: typeof Home }[] = [
   { id: 'art', label: 'Pentru suflet', icon: Heart },
   { id: 'exhibitions', label: 'Pentru ochi', icon: Palette },
 ];
-const pageFromHash = (): Page =>
-  nav.some((n) => n.id === location.hash.slice(1)) ? (location.hash.slice(1) as Page) : 'home';
+// Admin needs the same-origin session cookie: web only, never in the demo or the apps.
+const hasAdmin = !isStaticPreview && !isMobileBuild;
+const legalKinds = Object.keys(legalPaths) as LegalKind[];
+// Legal pages also have clean paths (/confidentialitate, /termeni) for the store listings.
+const legalFromPath = () =>
+  legalKinds.find((kind) => location.pathname.replace(/\/$/, '').endsWith(`/${legalPaths[kind]}`));
+const pageFromHash = (): Page => {
+  const hash = location.hash.slice(1);
+  if (nav.some((n) => n.id === hash) || legalKinds.includes(hash as LegalKind)) return hash as Page;
+  return legalFromPath() || 'home';
+};
 export default function App() {
   const [page, setPage] = useState<Page>(pageFromHash);
-  const [admin, setAdmin] = useState(!isStaticPreview && location.pathname.startsWith('/admin'));
+  const [admin, setAdmin] = useState(hasAdmin && location.pathname.startsWith('/admin'));
   const [catalog, setCatalog] = useState<Catalog | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -60,7 +81,6 @@ export default function App() {
   const [artwork, setArtwork] = useState<Artwork | null>(null);
   const [menu, setMenu] = useState(false);
   const [install, setInstall] = useState(false);
-  const [privacy, setPrivacy] = useState(false);
   const refresh = useCallback(async () => {
     try {
       const data = await api<Catalog>('/catalog');
@@ -77,7 +97,10 @@ export default function App() {
   useEffect(() => {
     void refresh();
     const onHash = () => setPage(pageFromHash());
-    const onPop = () => setAdmin(!isStaticPreview && location.pathname.startsWith('/admin'));
+    const onPop = () => {
+      setAdmin(hasAdmin && location.pathname.startsWith('/admin'));
+      setPage(pageFromHash());
+    };
     window.addEventListener('hashchange', onHash);
     window.addEventListener('popstate', onPop);
     return () => {
@@ -86,14 +109,35 @@ export default function App() {
     };
   }, [refresh]);
   useEffect(() => {
+    if (!isMobileBuild) return;
+    const onBack = (back: Event) => {
+      // Close the foremost surface before leaving its underlying screen.
+      const photoClose = document.querySelector<HTMLButtonElement>('.lightbox-close');
+      const dialog = [...document.querySelectorAll<HTMLDialogElement>('dialog[open]')].at(-1);
+      if (photoClose) photoClose.click();
+      else if (dialog) dialog.dispatchEvent(new Event('cancel', { cancelable: true }));
+      else if (menu) setMenu(false);
+      else if (page !== 'home') {
+        location.hash = 'home';
+        setPage('home');
+        window.scrollTo(0, 0);
+      } else return; // Android returns to the launcher without destroying the app.
+      back.preventDefault();
+    };
+    window.addEventListener('atelier:back', onBack);
+    return () => window.removeEventListener('atelier:back', onBack);
+  }, [page, menu]);
+  useEffect(() => {
     document.title = admin
       ? 'Administrare · Atelier de vise'
-      : `${nav.find((n) => n.id === page)?.label} · Atelier de vise`;
+      : `${legalTitles[page as LegalKind] || nav.find((n) => n.id === page)?.label} · Atelier de vise`;
   }, [page, admin]);
   const navigate = (next: Page, filter: Category | 'all' = 'all') => {
     setCategory(filter);
     setPage(next);
-    location.hash = next;
+    // Leave a legal path (e.g. /termeni) so the rest of the app keeps its usual URLs.
+    if (legalFromPath()) history.pushState(null, '', `${import.meta.env.BASE_URL}#${next}`);
+    else location.hash = next;
     setMenu(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -159,7 +203,7 @@ export default function App() {
           ))}
         </nav>
         <div className="header-actions">
-          {!isStaticPreview && (
+          {hasAdmin && (
             <button className="admin-link" onClick={openAdmin} aria-label="Administrare">
               <ShieldCheck size={19} />
               <span>Admin</span>
@@ -226,8 +270,8 @@ export default function App() {
                 </div>
                 <div className="hero-small-photo">
                   <img
-                    src={assetUrl('/images/gallery.jpg')}
-                    alt="Pictură florală cu trandafiri și lalele pe un fundal închis"
+                    src={assetUrl('/images/atelier/vin-velier-masa.webp')}
+                    alt="Tablou cu un velier pe lac, pictat la o seară „Vin și pictez”, lângă un pahar de vin"
                   />
                   <span>puțină culoare schimbă tot.</span>
                 </div>
@@ -337,6 +381,31 @@ export default function App() {
                 Ne vedem joi? <ArrowUpRight size={20} />
               </button>
             </section>
+            <section className="section-width evenings-section">
+              <div className="section-heading">
+                <div>
+                  <span className="eyebrow orange-text">DIN SERILE DE JOI</span>
+                  <h2>
+                    Pânze albe la 18:00. <em>Povești la 21:00.</em>
+                  </h2>
+                </div>
+                <button className="text-button" onClick={() => navigate('memories')}>
+                  Toate amintirile <ArrowUpRight size={18} />
+                </button>
+              </div>
+              <div className="evenings-grid">
+                {eveningPhotos.map((photo) => (
+                  <button
+                    key={photo.src}
+                    className="evenings-photo"
+                    onClick={() => navigate('memories')}
+                    aria-label={`${photo.alt} · vezi amintirile`}
+                  >
+                    <img src={assetUrl(photo.src)} alt={photo.alt} loading="lazy" />
+                  </button>
+                ))}
+              </div>
+            </section>
             <section className="section-width story-section">
               <span className="eyebrow">AICI NU EXISTĂ „NU AM TALENT”</span>
               <h2>
@@ -350,6 +419,26 @@ export default function App() {
               <Flower />
             </section>
           </>
+        )}
+        {(page === 'privacy' || page === 'terms') && (
+          <section className="section-width inner-page legal-page">
+            {page === 'privacy' ? (
+              <PageHeading
+                eyebrow="DESPRE DATELE TALE"
+                title="Politica de"
+                accent="confidențialitate."
+                description="Ce date păstrăm când te înscrii sau ne scrii despre un tablou, de ce și cum le poți controla."
+              />
+            ) : (
+              <PageHeading
+                eyebrow="CA SĂ NE ÎNȚELEGEM BINE"
+                title="Termeni"
+                accent="și condiții."
+                description="Cum funcționează înscrierile, plata, anulările și cererile pentru tablouri."
+              />
+            )}
+            <LegalContent kind={page} settings={catalog?.settings} onOpen={navigate} />
+          </section>
         )}
         {page === 'calendar' && (
           <section className="section-width inner-page">
@@ -487,11 +576,14 @@ export default function App() {
                 <Instagram size={16} /> Instagram <ArrowUpRight size={14} />
               </a>
             )}
-            <button onClick={() => setInstall(true)}>
-              <Download size={16} /> Ia atelierul cu tine
-            </button>
-            <button onClick={() => setPrivacy(true)}>Despre datele tale</button>
-            {!isStaticPreview && (
+            {!isMobileBuild && (
+              <button onClick={() => setInstall(true)}>
+                <Download size={16} /> Ia atelierul cu tine
+              </button>
+            )}
+            <button onClick={() => navigate('privacy')}>Confidențialitate</button>
+            <button onClick={() => navigate('terms')}>Termeni și condiții</button>
+            {hasAdmin && (
               <button onClick={openAdmin}>
                 Administrare <ArrowUpRight size={14} />
               </button>
@@ -525,7 +617,13 @@ export default function App() {
           onRefresh={refresh}
         />
       )}
-      {artwork && <ArtworkDetail artwork={artwork} onClose={() => setArtwork(null)} />}
+      {artwork && (
+        <ArtworkDetail
+          artwork={artwork}
+          settings={catalog?.settings}
+          onClose={() => setArtwork(null)}
+        />
+      )}
       {install && (
         <Modal title="Instalează aplicația" onClose={() => setInstall(false)}>
           <div className="text-modal">
@@ -546,54 +644,6 @@ export default function App() {
               Instalarea necesită o adresă HTTPS. Pentru înscrieri și locuri actualizate ai nevoie
               de internet.
             </p>
-          </div>
-        </Modal>
-      )}
-      {privacy && (
-        <Modal title="Despre datele tale" onClose={() => setPrivacy(false)}>
-          <div className="text-modal">
-            <h2>
-              Datele tale, <em>cu grijă.</em>
-            </h2>
-            {isStaticPreview ? (
-              <p>
-                Aceasta este o previzualizare cu date demonstrative. Formularele de înscriere și
-                cumpărare sunt închise; nu colectăm nume sau numere de telefon. Aplicația nu
-                folosește module de analiză, publicitate sau cookie-uri de autentificare în această
-                versiune.
-              </p>
-            ) : (
-              <>
-                <p>
-                  La înscriere, atelierul salvează numele, telefonul, evenimentul și numărul de
-                  locuri. Pentru o cerere de cumpărare, salvează numele, telefonul și tabloul ales.
-                </p>
-                <p>
-                  Datele sunt folosite pentru gestionarea înscrierii sau a cererii și pentru a te
-                  contacta în legătură cu aceasta. Nu sunt afișate public și nu sunt folosite pentru
-                  marketing în această aplicație.
-                </p>
-                <p>
-                  Nu este creat un cont și numărul de telefon nu este verificat prin SMS. Pentru
-                  modificarea, anularea sau ștergerea datelor, contactează atelierul
-                  {catalog?.settings.phone
-                    ? ` la ${catalog.settings.phone}`
-                    : ' folosind datele de contact care vor fi publicate aici'}
-                  .
-                </p>
-                <p>
-                  Numai zona de administrare folosește un cookie de sesiune. Nu folosim module de
-                  analiză sau publicitate.
-                </p>
-                {catalog?.settings.demo && (
-                  <p className="demo-note">
-                    Versiune demonstrativă. Înainte de lansare, administratorul trebuie să
-                    completeze identitatea și datele de contact ale operatorului și politica de
-                    păstrare a datelor.
-                  </p>
-                )}
-              </>
-            )}
           </div>
         </Modal>
       )}
@@ -885,10 +935,7 @@ function EventDetail({
                 )}
                 .
               </p>
-              <button className="button primary" onClick={() => downloadCalendar(event)}>
-                <CalendarDays size={17} />
-                Adaugă în calendar
-              </button>
+              <CalendarButton event={event} />
             </div>
           ) : past ? (
             <>
@@ -901,9 +948,7 @@ function EventDetail({
               <Palette size={30} />
               <h3>{event.price === 0 ? 'Intrare liberă' : money(event.price)}</h3>
               <p>Nu este nevoie de înscriere. Păstrează data și vino să descoperi lucrările.</p>
-              <button className="button primary" onClick={() => downloadCalendar(event)}>
-                Adaugă în calendar <CalendarDays size={17} />
-              </button>
+              <CalendarButton event={event} />
             </>
           ) : (
             <>
@@ -942,7 +987,7 @@ function EventDetail({
                       ))}
                     </select>
                   </label>
-                  <Consent />
+                  <Consent settings={settings} />
                   <ErrorMessage error={error} />
                   <button className="button primary full-width" disabled={busy}>
                     {busy ? 'Se salvează…' : 'Confirmă înscrierea'}
@@ -995,6 +1040,38 @@ function EventDetail({
     </Modal>
   );
 }
+function CalendarButton({ event }: { event: AtelierEvent }) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  return (
+    <>
+      <button
+        className="button primary"
+        disabled={busy}
+        onClick={async () => {
+          setBusy(true);
+          setError('');
+          try {
+            await downloadCalendar(event);
+          } catch {
+            setError('Nu am putut exporta data. Te rugăm să încerci din nou.');
+          } finally {
+            setBusy(false);
+          }
+        }}
+      >
+        <CalendarDays size={17} />
+        {busy
+          ? 'Se pregătește…'
+          : isMobileBuild
+            ? 'Salvează / distribuie data'
+            : 'Adaugă în calendar'}
+      </button>
+      <ErrorMessage error={error} />
+    </>
+  );
+}
+
 export function ContactFields() {
   return (
     <>
@@ -1023,18 +1100,45 @@ export function ContactFields() {
     </>
   );
 }
-export function Consent() {
+export function Consent({ settings }: { settings?: Settings }) {
+  const [legal, setLegal] = useState<LegalKind | null>(null);
   return (
-    <label className="checkbox-field">
-      <input type="checkbox" name="consent" required />
-      <span>
-        Sunt de acord ca atelierul să folosească numele și telefonul meu pentru această solicitare
-        și pentru a mă contacta în legătură cu ea.
-      </span>
-    </label>
+    <>
+      <label className="checkbox-field">
+        <input type="checkbox" name="consent" required />
+        <span>
+          Sunt de acord ca atelierul să folosească numele și telefonul meu pentru această solicitare
+          și pentru a mă contacta în legătură cu ea. Detalii în{' '}
+          <button type="button" className="consent-link" onClick={() => setLegal('privacy')}>
+            Politica de confidențialitate
+          </button>
+          .
+        </span>
+      </label>
+      {/* Portal: keeps the policy outside the <form>, so its buttons never submit it,
+          and on top of the booking dialog, so typed details are kept. */}
+      {legal &&
+        createPortal(
+          <Modal title={legalTitles[legal]} onClose={() => setLegal(null)} wide>
+            <div className="text-modal legal-modal">
+              <h2>{legalTitles[legal]}</h2>
+              <LegalContent kind={legal} settings={settings} onOpen={setLegal} />
+            </div>
+          </Modal>,
+          document.body,
+        )}
+    </>
   );
 }
-function ArtworkDetail({ artwork, onClose }: { artwork: Artwork; onClose: () => void }) {
+function ArtworkDetail({
+  artwork,
+  settings,
+  onClose,
+}: {
+  artwork: Artwork;
+  settings?: Settings;
+  onClose: () => void;
+}) {
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -1089,7 +1193,7 @@ function ArtworkDetail({ artwork, onClose }: { artwork: Artwork; onClose: () => 
             <form onSubmit={submit}>
               <h3>Îl vezi la tine acasă?</h3>
               <ContactFields />
-              <Consent />
+              <Consent settings={settings} />
               <ErrorMessage error={error} />
               <button className="button primary full-width" disabled={busy}>
                 {busy ? 'Se trimite…' : 'Sunt interesat(ă)'}

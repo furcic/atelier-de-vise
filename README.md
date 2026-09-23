@@ -1,6 +1,6 @@
 # Atelier de vise
 
-Aplicație în limba română, optimizată pentru telefon, realizată cu React + TypeScript, Node.js / Express și **MySQL**. Prima versiune este o **PWA**: funcționează în browser și poate fi instalată pe ecranul principal pe Android și iPhone, de pe un domeniu HTTPS. Nu este încă un pachet nativ publicat în App Store sau Google Play.
+Aplicație în limba română, optimizată pentru telefon, realizată cu React + TypeScript, Node.js / Express și **MySQL**. Include versiunea web/PWA și proiecte **Android + iOS prin Capacitor 8**, care folosesc aceeași interfață. Aplicațiile native sunt deocamdată demonstrative, fără înscrieri reale, și nu sunt publicate în App Store sau Google Play.
 
 ## Ce include
 
@@ -35,6 +35,8 @@ Catalogul demonstrativ din `src/demo.ts` este independent de MySQL și își gen
 Pentru versiunea live cu baza de date, folosește `npm run build` și serverul Express, conform instrucțiunilor de mai jos. Acest build nu activează modul de previzualizare și păstrează API-ul MySQL.
 
 ## Pornire locală cu MySQL
+
+Pentru aplicațiile Android și iPhone, vezi [Ghidul mobile](docs/mobile.md). Comenzile rapide sunt `npm run mobile:ios` și `npm run mobile:android`; acestea compilează interfața demonstrativă, sincronizează proiectele și deschid IDE-ul platformei. Nu folosesc site-ul GitHub Pages ca server.
 
 Necesită Node.js 22 și MySQL 8.4+.
 
