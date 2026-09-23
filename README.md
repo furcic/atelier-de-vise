@@ -93,7 +93,9 @@ docker compose run --rm app node server/create-admin.js
 docker compose up -d app
 ```
 
-Proxy-ul HTTPS local trebuie să trimită cererile către `127.0.0.1:3101`. MySQL nu este expus pe un port public. Nu activa `trust proxy` global fără să configurezi exact proxy-ul; implicit, limitarea cererilor va vedea IP-ul proxy-ului. Pentru trafic public, configurează explicit proxy-ul de încredere și verifică păstrarea adreselor clienților. Containerizarea este pregătită, dar nu a fost rulată în această sesiune.
+Proxy-ul HTTPS local trebuie să trimită cererile către `127.0.0.1:3101`. MySQL nu este expus pe un port public. `HOST=127.0.0.1` face ca API-ul să asculte numai local (implicit `0.0.0.0`). `TRUST_PROXY` spune Express ce proxy să creadă pentru IP-ul clientului, de care depinde limitarea cererilor: un număr de hopuri (de ex. `1`) sau adrese (de ex. `loopback`). Nesetat, nu este crezut niciun proxy și limitarea vede IP-ul proxy-ului.
+
+Instalarea de producție (`atelierdevise.ro`) rulează fără Docker: Cloudflare (HTTPS, mod SSL *Flexible*) → nginx pe portul 80, care restabilește IP-ul vizitatorului din `CF-Connecting-IP` și îl trimite în `X-Forwarded-For` → aplicația sub PM2, cu `HOST=127.0.0.1` și `TRUST_PROXY=loopback`.
 
 Păstrează backup-uri MySQL: acestea includ și fotografiile încărcate. Fișierele din `public/` fac parte din aplicație. Service worker-ul afișează o pagină offline și **nu salvează în cache API-ul, datele personale sau disponibilitatea locurilor**.
 

@@ -62,6 +62,11 @@ async function encodeImage(file) {
 export function createApp(db) {
   const app = express();
   app.disable('x-powered-by');
+  // Behind the HTTPS reverse proxy: number of trusted hops (e.g. 1) or proxy addresses,
+  // so rate limiting sees the real client IP. Unset = no proxy trusted.
+  const trustProxy = process.env.TRUST_PROXY?.trim();
+  if (trustProxy)
+    app.set('trust proxy', /^\d+$/.test(trustProxy) ? Number(trustProxy) : trustProxy);
   app.use(
     helmet({
       contentSecurityPolicy: {
