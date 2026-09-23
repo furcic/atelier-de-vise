@@ -71,6 +71,15 @@ export const settingsSchema = z.object({
   facebook: z
     .union([z.literal(''), z.url().regex(/^https:\/\/(www\.|m\.)?facebook\.com\/[\w.\/-]+$/)])
     .default(''),
+  app_store: z
+    .union([z.literal(''), z.url().regex(/^https:\/\/apps\.apple\.com\/[\w.\/-]+$/)])
+    .default(''),
+  play_store: z
+    .union([
+      z.literal(''),
+      z.url().regex(/^https:\/\/play\.google\.com\/store\/apps\/details\?id=[\w.]+$/),
+    ])
+    .default(''),
   demo: z.boolean(),
 });
 export function problem(status, message) {

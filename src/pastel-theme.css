@@ -353,6 +353,10 @@ footer {
 .login-card h1 em {
   color: var(--orange);
 }
+.text-modal .store-button {
+  display: inline-flex;
+  margin: 4px 0 12px;
+}
 
 /* Admin */
 .admin-login {

@@ -183,6 +183,8 @@ const catalog: Catalog = {
     phone: '',
     instagram: 'https://www.instagram.com/atelier.de.vise/',
     facebook: 'https://www.facebook.com/atelierMiReLaDobrescu/',
+    app_store: '',
+    play_store: '',
     demo: true,
   },
 };

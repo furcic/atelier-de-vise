@@ -378,11 +378,13 @@ test('weekly dates are distinct and invalid events never partially commit', asyn
     400,
   );
 });
-test('settings save Instagram and Facebook links and reject other hosts', async () => {
+test('settings save social and app store links and reject other hosts', async () => {
   const { settings: original } = (await request(app).get('/api/catalog')).body;
   const links = {
     instagram: 'https://www.instagram.com/atelier.de.vise/',
     facebook: 'https://www.facebook.com/atelierMiReLaDobrescu/',
+    app_store: 'https://apps.apple.com/ro/app/atelier-de-vise/id1234567890',
+    play_store: 'https://play.google.com/store/apps/details?id=ro.atelierdevise.app',
   };
   try {
     const saved = await admin.put('/api/admin/settings').send({ ...original, ...links });
@@ -390,10 +392,16 @@ test('settings save Instagram and Facebook links and reject other hosts', async 
     const { settings } = (await request(app).get('/api/catalog')).body;
     assert.equal(settings.instagram, links.instagram);
     assert.equal(settings.facebook, links.facebook);
+    assert.equal(settings.app_store, links.app_store);
+    assert.equal(settings.play_store, links.play_store);
     const wrongHost = await admin
       .put('/api/admin/settings')
       .send({ ...original, facebook: 'https://facebook.example.com/atelier' });
     assert.equal(wrongHost.status, 400);
+    const wrongStore = await admin
+      .put('/api/admin/settings')
+      .send({ ...original, play_store: 'https://example.com/?id=ro.atelierdevise.app' });
+    assert.equal(wrongStore.status, 400);
   } finally {
     await admin.put('/api/admin/settings').send(original);
   }

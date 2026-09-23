@@ -638,17 +638,44 @@ export default function App() {
             <h2>
               Ia bucuria <em>cu tine.</em>
             </h2>
-            <p>Poți adăuga aplicația pe ecranul telefonului:</p>
-            <h3>Pe iPhone</h3>
-            <p>Deschide în Safari, apasă Partajare, apoi „Adăugați la ecranul principal”.</p>
-            <h3>Pe Android</h3>
             <p>
-              Deschide în Chrome, apasă meniul ⋮, apoi „Instalează aplicația” sau „Adaugă pe ecranul
-              de pornire”.
+              {catalog?.settings.app_store || catalog?.settings.play_store
+                ? 'Descarcă aplicația pe telefon:'
+                : 'Poți adăuga aplicația pe ecranul telefonului:'}
             </p>
+            <h3>Pe iPhone</h3>
+            {catalog?.settings.app_store ? (
+              <a
+                className="button dark store-button"
+                href={catalog.settings.app_store}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Download size={18} /> Descarcă din App Store
+              </a>
+            ) : (
+              <p>Deschide în Safari, apasă Partajare, apoi „Adăugați la ecranul principal”.</p>
+            )}
+            <h3>Pe Android</h3>
+            {catalog?.settings.play_store ? (
+              <a
+                className="button dark store-button"
+                href={catalog.settings.play_store}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Download size={18} /> Descarcă din Google Play
+              </a>
+            ) : (
+              <p>
+                Deschide în Chrome, apasă meniul ⋮, apoi „Instalează aplicația” sau „Adaugă pe
+                ecranul de pornire”.
+              </p>
+            )}
             <p className="muted">
-              Instalarea necesită o adresă HTTPS. Pentru înscrieri și locuri actualizate ai nevoie
-              de internet.
+              {catalog?.settings.app_store && catalog?.settings.play_store
+                ? 'Pentru înscrieri și locuri actualizate ai nevoie de internet.'
+                : 'Instalarea din browser necesită o adresă HTTPS. Pentru înscrieri și locuri actualizate ai nevoie de internet.'}
             </p>
           </div>
         </Modal>

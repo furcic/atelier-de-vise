@@ -32,6 +32,8 @@ export type Settings = {
   phone: string;
   instagram: string;
   facebook: string;
+  app_store: string;
+  play_store: string;
   demo: boolean;
 };
 export type Catalog = { events: AtelierEvent[]; artworks: Artwork[]; settings: Settings };

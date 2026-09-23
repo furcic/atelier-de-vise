@@ -435,8 +435,17 @@ export function createApp(db) {
   app.put('/api/admin/settings', async (req, res) => {
     const data = settingsSchema.parse(req.body);
     await db.execute(
-      'UPDATE settings SET artist=?,address=?,phone=?,instagram=?,facebook=?,demo=? WHERE id=1',
-      [data.artist, data.address, data.phone, data.instagram, data.facebook, data.demo],
+      'UPDATE settings SET artist=?,address=?,phone=?,instagram=?,facebook=?,app_store=?,play_store=?,demo=? WHERE id=1',
+      [
+        data.artist,
+        data.address,
+        data.phone,
+        data.instagram,
+        data.facebook,
+        data.app_store,
+        data.play_store,
+        data.demo,
+      ],
     );
     res.json({ ok: true });
   });

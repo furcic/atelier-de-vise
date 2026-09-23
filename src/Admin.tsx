@@ -1090,6 +1090,8 @@ function SettingsForm({
         phone: String(form.get('phone')),
         instagram: String(form.get('instagram')),
         facebook: String(form.get('facebook')),
+        app_store: String(form.get('app_store')),
+        play_store: String(form.get('play_store')),
         demo: form.get('demo') === 'on',
       });
     } catch (e) {
@@ -1149,6 +1151,26 @@ function SettingsForm({
           defaultValue={settings.facebook}
           maxLength={200}
           placeholder="https://www.facebook.com/atelierul.tau/"
+        />
+      </label>
+      <label className="field">
+        Link App Store (iPhone)
+        <input
+          name="app_store"
+          type="url"
+          defaultValue={settings.app_store}
+          maxLength={200}
+          placeholder="https://apps.apple.com/ro/app/atelier-de-vise/id…"
+        />
+      </label>
+      <label className="field">
+        Link Google Play (Android)
+        <input
+          name="play_store"
+          type="url"
+          defaultValue={settings.play_store}
+          maxLength={200}
+          placeholder="https://play.google.com/store/apps/details?id=ro.atelierdevise.app"
         />
       </label>
       <label className="checkbox-field">

@@ -8,11 +8,18 @@ export async function migrate(db) {
     .filter(Boolean))
     await db.query(statement);
   // Columns added after the first release (MySQL 8 has no ADD COLUMN IF NOT EXISTS).
-  const [facebook] = await db.query("SHOW COLUMNS FROM settings LIKE 'facebook'");
-  if (!facebook.length)
-    await db.query(
-      "ALTER TABLE settings ADD COLUMN facebook VARCHAR(200) NOT NULL DEFAULT '' AFTER instagram",
-    );
+  const added = [
+    ['facebook', 'instagram'],
+    ['app_store', 'facebook'],
+    ['play_store', 'app_store'],
+  ];
+  for (const [column, after] of added) {
+    const [existing] = await db.query('SHOW COLUMNS FROM settings LIKE ?', [column]);
+    if (!existing.length)
+      await db.query(
+        `ALTER TABLE settings ADD COLUMN ${column} VARCHAR(200) NOT NULL DEFAULT '' AFTER ${after}`,
+      );
+  }
 }
 if (process.argv[1]?.endsWith('/migrate.js')) {
   try {
