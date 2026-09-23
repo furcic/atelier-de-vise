@@ -238,8 +238,8 @@ export default function App() {
                   <Flower className="hero-title-flower" />
                 </h1>
                 <p>
-                  Lasă lumea pe pauză. Ia o pensulă, un strop de curaj și hai să facem ceva frumos.
-                  Împreună.
+                  Pune lumea pe pauză. Ia o pensulă, adună un strop de curaj și hai să facem ceva
+                  frumos împreună.
                 </p>
                 <div className="hero-buttons">
                   <button className="button primary" onClick={() => navigate('calendar')}>
